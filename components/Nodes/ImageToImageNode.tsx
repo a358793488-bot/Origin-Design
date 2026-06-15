@@ -31,7 +31,7 @@ export const ImageToImageNode: React.FC<ImageToImageNodeProps> = ({
     const hasInputImage = inputs.length > 0;
 
     const checkConfig = useCallback(() => {
-         const mName = data.model || 'BananaPro';
+         const mName = data.model || 'Agnes Image';
          const cfg = getModelConfig(mName);
          setIsConfigured(!!cfg.key);
     }, [data.model]);
@@ -56,8 +56,8 @@ export const ImageToImageNode: React.FC<ImageToImageNodeProps> = ({
     useEffect(() => { if (isSelectedAndStable && showControls) { const t = setTimeout(() => setDeferredInputs(true), 100); return () => clearTimeout(t); } else setDeferredInputs(false); }, [isSelectedAndStable, showControls]);
 
     // Get Rules for current model
-    const currentModel = data.model || 'BananaPro';
-    const handler = IMAGE_HANDLERS[currentModel] || IMAGE_HANDLERS['BananaPro'];
+const currentModel = data.model || 'Agnes Image';
+        const handler = IMAGE_HANDLERS[currentModel] || IMAGE_HANDLERS['Agnes Image'];
     const rules = handler.rules;
     const supportedResolutions = rules.resolutions || ['1k'];
     const supportedRatios = rules.ratios || ['1:1', '16:9'];
@@ -141,11 +141,11 @@ export const ImageToImageNode: React.FC<ImageToImageNodeProps> = ({
                      </div>
                  )}
                  <div className={`${controlPanelBg} rounded-2xl p-3 shadow-2xl flex flex-col gap-3 border`}>
-                      <div className="relative group/input">
-                          <textarea className={`w-full border rounded-xl p-3 text-[11px] leading-relaxed resize-none focus:outline-none min-h-[70px] no-scrollbar ${inputBg}`} placeholder="描述你想要的变化效果..." value={data.prompt || ''} onChange={(e) => updateData(data.id, { prompt: e.target.value })} onWheel={(e) => e.stopPropagation()} />
-                      </div>
+                       <div className="relative group/input">
+                           <textarea className={`w-full border rounded-xl p-3 text-[11px] leading-relaxed resize-none focus:outline-none min-h-[70px] no-scrollbar ${inputBg}`} placeholder="描述你想要的变化效果..." value={data.prompt || ''} onChange={(e) => updateData(data.id, { prompt: e.target.value })} onWheel={(e) => e.stopPropagation()} />
+                       </div>
                       <div className="flex items-center justify-between gap-2 h-7">
-                          <LocalCustomDropdown options={imageModels} value={data.model || 'BananaPro'} onChange={(val: any) => updateData(data.id, { model: val })} isOpen={activeDropdown === 'model'} onToggle={() => setActiveDropdown(activeDropdown === 'model' ? null : 'model')} onClose={() => setActiveDropdown(null)} align="left" width="w-[120px]" isDark={isDark} />
+                          <LocalCustomDropdown options={imageModels} value={data.model || 'Agnes Image'} onChange={(val: any) => updateData(data.id, { model: val })} isOpen={activeDropdown === 'model'} onToggle={() => setActiveDropdown(activeDropdown === 'model' ? null : 'model')} onClose={() => setActiveDropdown(null)} align="left" width="w-[120px]" isDark={isDark} />
                           <div className={`w-px h-3 ${dividerColor}`}></div>
                           <div className="flex items-center gap-1">
                               <LocalCustomDropdown icon={Icons.Crop} options={supportedRatios} value={data.aspectRatio || '1:1'} onChange={handleRatioChange} isOpen={activeDropdown === 'ratio'} onToggle={() => setActiveDropdown(activeDropdown === 'ratio' ? null : 'ratio')} onClose={() => setActiveDropdown(null)} isDark={isDark} />

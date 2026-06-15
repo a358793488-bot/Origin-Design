@@ -73,23 +73,14 @@ const CanvasWithSidebar: React.FC = () => {
       dragModeRef.current = dragMode;
   }, [dragMode]);
 
-  // 清除 Sora 2 的旧配置（修复 endpoint 问题）
+  // 默认使用全局配置（从 localStorage 读取预设）
   useEffect(() => {
       if (typeof window !== 'undefined') {
-          try {
-              const sora2Key = `API_CONFIG_MODEL_Sora 2`;
-              const stored = localStorage.getItem(sora2Key);
-              if (stored) {
-                  const parsed = JSON.parse(stored);
-                  // 如果 endpoint 是旧的 chat completions，清除配置
-                  if (parsed.endpoint === '/v1/chat/completions') {
-                      localStorage.removeItem(sora2Key);
-                      console.log('[App] Cleared old Sora 2 config with old endpoint');
-                  }
-              }
-          } catch(e) {
-              // 忽略错误
-          }
+          const key = 'GLOBAL_API_KEY';
+          const url = 'GLOBAL_BASE_URL';
+        if (!localStorage.getItem(key) && !localStorage.getItem(url)) {
+            localStorage.setItem(url, 'https://apihub.agnes-ai.com/v1');
+        }
       }
   }, []);
 
@@ -341,9 +332,9 @@ const CanvasWithSidebar: React.FC = () => {
     const getDefaultModel = (t: NodeType) => {
         switch (t) {
             case NodeType.TEXT_TO_IMAGE:
-                return 'BananaPro';
+                return 'Agnes Image';
             case NodeType.TEXT_TO_VIDEO:
-                return 'Sora 2';
+                return 'Agnes Video';
             default:
                 return '';
         }
@@ -404,9 +395,9 @@ const CanvasWithSidebar: React.FC = () => {
       const getDefaultModel = (t: NodeType) => {
           switch (t) {
               case NodeType.TEXT_TO_IMAGE:
-                  return 'BananaPro';
+                  return 'Agnes Image';
               case NodeType.TEXT_TO_VIDEO:
-                  return 'Sora 2';
+                  return 'Agnes Video';
               default:
                   return '';
           }
@@ -622,7 +613,7 @@ const CanvasWithSidebar: React.FC = () => {
           // Start-End Frame to Video generation (首尾帧模式)
           else if (node.type === NodeType.START_END_TO_VIDEO) {
             // 添加 _FL 后缀来标识首尾帧模式
-            const modelWithFL = (node.model || 'Sora 2') + '_FL';
+            const modelWithFL = (node.model || 'Agnes Video') + '_FL';
             // 如果设置了 swapFrames，交换首尾帧顺序
             const orderedInputs = node.swapFrames && inputs.length >= 2 ? [inputs[1], inputs[0]] : inputs;
             results = await generateVideo(

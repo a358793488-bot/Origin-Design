@@ -62,8 +62,8 @@ const Canvas: React.FC = () => {
              type === NodeType.TEXT_TO_VIDEO ? 'Text to Video' :
              type === NodeType.CREATIVE_DESC ? 'Creative Description' : 'Original Image',
       aspectRatio: type === NodeType.TEXT_TO_VIDEO ? '16:9' : '16:9',
-      model: type === NodeType.TEXT_TO_IMAGE ? 'gemini-3-pro-image-preview' : 
-             type === NodeType.TEXT_TO_VIDEO ? 'veo-3.1-fast-generate-preview' : 'IMAGE',
+      model: type === NodeType.TEXT_TO_IMAGE ? 'Agnes Image' : 
+             type === NodeType.TEXT_TO_VIDEO ? 'Agnes Video' : 'IMAGE',
       prompt: '',
     };
     setNodes(prev => [...prev, newNode]);

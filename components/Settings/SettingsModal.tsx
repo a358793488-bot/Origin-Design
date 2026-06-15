@@ -56,8 +56,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
         localStorage.setItem(GLOBAL_BASE_URL_KEY, globalBaseUrl);
         localStorage.setItem(GLOBAL_API_KEY_KEY, globalApiKey);
         
-        // 更新所有模型的 baseUrl（除了特定模型）
-        const excludeModels = ['Jimeng45', 'Jimeng41', 'Jimeng31'];
+        // 更新所有模型的 baseUrl
+        const excludeModels: string[] = [];
         Object.keys(MODEL_REGISTRY).forEach(key => {
             if (!excludeModels.some(ex => key.includes(ex))) {
                 const config = configs[key] || {};
@@ -226,7 +226,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
             globalBaseUrl,
             globalApiKey,
             configs: Object.fromEntries(
-                Object.entries(configs).filter(([_, v]) => v.key || v.baseUrl || v.modelId)
+                Object.entries(configs).filter(([_, v]) => (v as ModelConfig).key || (v as ModelConfig).baseUrl || (v as ModelConfig).modelId)
             )
         };
         
@@ -234,7 +234,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `flowgen-config-${new Date().toISOString().slice(0, 10)}.json`;
+        a.download = `origin-design-config-${new Date().toISOString().slice(0, 10)}.json`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -282,7 +282,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
             const matchesType = filterType === 'all' || 
                 (filterType === 'image' && def.category === 'IMAGE') ||
                 (filterType === 'video' && def.category === 'VIDEO') ||
-                (filterType === 'chat' && def.category === 'CHAT');
+                (filterType === 'chat' && def.category === ('CHAT' as never));
             
             return matchesSearch && matchesType;
         });
@@ -338,29 +338,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
                         {/* ⚠️ 警告提示 */}
                         <div className={`p-4 rounded-xl border ${isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200'}`}>
                             <div className="flex items-start gap-3">
-                                <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'}`}>
-                                    <Icons.AlertTriangle size={18} />
-                                </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className={`text-sm font-bold mb-1 ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>
-                                        ⚠️ 博主提醒：自接 API 平台有风险！
-                                    </h4>
-                                    <p className={`text-xs leading-relaxed ${isDark ? 'text-amber-300/80' : 'text-amber-600'}`}>
-                                        很多小型 API 中转商可能会跑路，充值后血本无归。如果出图/出视频量大，建议使用大厂服务。
-                                    </p>
-                                    <div className={`mt-2 p-2 rounded-lg ${isDark ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-emerald-50 border border-emerald-200'}`}>
-                                        <p className={`text-xs ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                                            <span className="font-bold">✅ 推荐：</span>
-                                            <a href="https://xianchou.com" target="_blank" rel="noopener noreferrer" className="underline ml-1 hover:opacity-80">
-                                                献丑AI (xianchou.com)
-                                            </a>
-                                            <span className="mx-1">—</span>
-                                            <span>Banana Pro 4K 仅 0.2元/张，Sora 2 顶配仅 4积分/条</span>
-                                        </p>
-                                    </div>
-                                    <p className={`text-[10px] mt-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                                        💡 提示：不同中转商的接口参数格式可能不同，如不兼容请参考 README 或用 AI 编辑器调整代码
-                                    </p>
+                                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    本画布已配置 <strong>Agnes Image</strong>（文生图）和 <strong>Agnes Video</strong>（文生视频）模型。
+                                    在左侧菜单拖拽节点到画布，填写提示词后点击生成即可。
+                                  </p>
                                 </div>
                             </div>
                         </div>
@@ -381,7 +363,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, i
                                     placeholder="https://api.example.com"
                                 />
                                 <p className={`text-xs ${textMuted}`}>
-                                    修改后将自动更新所有模型的 BASE URL（Jimeng 4.5、4.1、3.1 除外）
+                                    修改后将自动更新所有模型的 BASE URL
                                 </p>
                             </div>
 

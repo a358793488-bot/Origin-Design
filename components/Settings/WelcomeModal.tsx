@@ -51,50 +51,15 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, isD
                 {/* Content */}
                 <div className="p-6 space-y-4">
                     
-                    {/* 警告区域 */}
-                    <div className={`p-4 rounded-xl border ${isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200'}`}>
+                    {/* 使用说明 */}
+                    <div className={`p-4 rounded-xl border ${isDark ? 'bg-blue-500/10 border-blue-500/30' : 'bg-blue-50 border-blue-200'}`}>
                         <div className="flex items-start gap-3">
-                            <Icons.AlertTriangle size={20} className={isDark ? 'text-amber-400 shrink-0 mt-0.5' : 'text-amber-600 shrink-0 mt-0.5'} />
+                            <Icons.Info size={20} className={isDark ? 'text-blue-400 shrink-0 mt-0.5' : 'text-blue-600 shrink-0 mt-0.5'} />
                             <div>
-                                <h4 className={`text-sm font-bold ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>
-                                    博主郑重提醒
-                                </h4>
-                                <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-amber-300/80' : 'text-amber-600'}`}>
-                                    自接 API 平台存在风险！很多小型 API 中转商可能会<strong>跑路</strong>，充值后血本无归。
-                                    如果你的出图/出视频量较大，强烈建议使用正规大厂服务。
+                                <p className={`text-xs leading-relaxed ${isDark ? 'text-blue-300/80' : 'text-blue-600'}`}>
+                                    本画布已配置 <strong>Agnes Image</strong>（文生图）和 <strong>Agnes Video</strong>（文生视频）模型。
+                                    左侧菜单拖拽节点到画布，填写提示词即可生成。
                                 </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 推荐区域 */}
-                    <div className={`p-4 rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'}`}>
-                        <div className="flex items-start gap-3">
-                            <Icons.Check size={20} className={isDark ? 'text-emerald-400 shrink-0 mt-0.5' : 'text-emerald-600 shrink-0 mt-0.5'} />
-                            <div>
-                                <h4 className={`text-sm font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                                    推荐使用
-                                </h4>
-                                <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-emerald-300/80' : 'text-emerald-600'}`}>
-                                    <a 
-                                        href="https://xianchou.com" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="font-bold underline hover:opacity-80"
-                                    >
-                                        献丑AI (xianchou.com)
-                                    </a>
-                                    <span className="mx-1">—</span>
-                                    大厂服务，稳定可靠不跑路
-                                </p>
-                                <div className={`mt-2 flex flex-wrap gap-2`}>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium ${isDark ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
-                                        🖼️ Banana Pro 4K 仅 0.2元/张
-                                    </span>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium ${isDark ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
-                                        🎬 Sora 2 顶配 仅 4积分/条
-                                    </span>
-                                </div>
                             </div>
                         </div>
                     </div>

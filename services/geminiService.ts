@@ -1,22 +1,18 @@
-
 import { MODEL_REGISTRY, getModelConfig, saveModelConfig, registerCustomModel, deleteModel, isCustomModel, getVisibleModels } from "./mode/config";
 import type { ModelConfig } from "./mode/config";
-import { IMAGE_HANDLERS, BananaHandler, Flux2Handler } from "./mode/image/configurations";
-import { VIDEO_HANDLERS, Sora2Handler, KlingStandardHandler } from "./mode/video/configurations";
+import { IMAGE_HANDLERS, AgnesImageHandler } from "./mode/image/configurations";
+import { VIDEO_HANDLERS, AgnesVideoHandler } from "./mode/video/configurations";
 import { constructUrl, fetchThirdParty } from "./mode/network";
 
-// Re-export for UI
 export { MODEL_REGISTRY, getModelConfig, saveModelConfig, registerCustomModel, deleteModel, isCustomModel, getVisibleModels };
 export type { ModelConfig };
 
-// --- Generators ---
-
 export const generateCreativeDescription = async (input: string, mode: 'IMAGE' | 'VIDEO'): Promise<string> => {
-  const config = getModelConfig('BananaPro'); 
+  const config = getModelConfig('Agnes Image');
   if (!config.key) return input;
   const prompt = `Optimize this ${mode.toLowerCase()} description for professional AI generation. Input: "${input}". Provide ONLY the optimized prompt text.`;
   try {
-     const payload = { model: 'gemini-2.0-flash-exp', messages: [{ role: 'user', content: prompt }] };
+     const payload = { model: 'agnes-2.0-flash', messages: [{ role: 'user', content: prompt }] };
      const url = constructUrl(config.baseUrl, '/v1/chat/completions');
      const res = await fetchThirdParty(url, 'POST', payload, config);
      return res.choices?.[0]?.message?.content || input;
@@ -26,32 +22,27 @@ export const generateCreativeDescription = async (input: string, mode: 'IMAGE' |
 };
 
 export const generateImage = async (
-    prompt: string, 
-    aspectRatio: string = "1:1", 
-    modelName: string = "BananaPro", 
-    resolution: string = "1k", 
+    prompt: string,
+    aspectRatio: string = "1:1",
+    modelName: string = "Agnes Image",
+    resolution: string = "1k",
     count: number = 1,
     inputImages: string[] = [],
     promptOptimize: boolean = false
 ): Promise<string[]> => {
   let handler = IMAGE_HANDLERS[modelName];
-  
-  // Fallback for custom models
+
   if (!handler) {
       const def = MODEL_REGISTRY[modelName];
       if (def) {
-          if (def.type === 'CHAT') handler = BananaHandler;
-          else handler = Flux2Handler; // Default to Generic Image Gen
+          handler = AgnesImageHandler;
       }
   }
-  
-  if (!handler) handler = IMAGE_HANDLERS['BananaPro'];
+
+  if (!handler) handler = IMAGE_HANDLERS['Agnes Image'];
 
   const config = getModelConfig(modelName);
-  
-  // Debug: Log image generation parameters
-  console.log(`[Image Gen] Model: ${modelName}, Input Images: ${inputImages.length}, Prompt Optimize: ${promptOptimize}`);
-  
+
   try {
       const result = await handler.generate(config, prompt, { aspectRatio, resolution, inputImages, count, promptOptimize });
       return Array.isArray(result) ? result : [result];
@@ -62,11 +53,11 @@ export const generateImage = async (
 };
 
 export const generateVideo = async (
-    prompt: string, 
-    inputImages: string[] = [], 
-    aspectRatio: string = "16:9", 
-    modelName: string = "Sora2", 
-    resolution: string = "720p", 
+    prompt: string,
+    inputImages: string[] = [],
+    aspectRatio: string = "16:9",
+    modelName: string = "Agnes Video",
+    resolution: string = "768p",
     duration: string = "5s",
     count: number = 1,
     promptOptimize: boolean = false
@@ -76,27 +67,21 @@ export const generateVideo = async (
     if (isStartEndMode) realModelName = modelName.replace('_FL', '');
 
     let handler = VIDEO_HANDLERS[realModelName];
-    
-    // Fallback for custom models
+
     if (!handler) {
         const def = MODEL_REGISTRY[realModelName];
         if (def) {
-            if (def.type === 'VIDEO_GEN_CHAT') handler = Sora2Handler;
-            else handler = KlingStandardHandler; // Default to Generic Video Gen
+            handler = AgnesVideoHandler;
         }
     }
 
-    if (!handler) handler = VIDEO_HANDLERS['Sora2'];
+    if (!handler) handler = VIDEO_HANDLERS['Agnes Video'];
 
     const config = getModelConfig(realModelName);
-    
-    // Debug: Log video generation parameters
-    console.log(`[Video Gen] Model: ${realModelName}, Input Images: ${inputImages.length}, Start-End Mode: ${isStartEndMode}, Prompt Optimize: ${promptOptimize}`);
-    console.log(`[Video Gen] Config:`, { baseUrl: config.baseUrl, endpoint: config.endpoint, queryEndpoint: config.queryEndpoint, modelId: config.modelId, hasKey: !!config.key });
-    
+
     try {
-        const result = await handler.generate(config, prompt, { 
-            aspectRatio, resolution, duration, inputImages, isStartEndMode, count, promptOptimize 
+        const result = await handler.generate(config, prompt, {
+            aspectRatio, resolution, duration, inputImages, isStartEndMode, count, promptOptimize
         });
         return Array.isArray(result) ? result : [result];
     } catch (e) {

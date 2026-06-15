@@ -28,66 +28,9 @@ const customModels = loadCustomModels();
 const deletedModels = loadDeletedModels();
 
 export const MODEL_REGISTRY: Record<string, ModelDef> = {
-  // --- Image Models ---
-  'BananaPro': { id: 'gemini-3-pro-image-preview', name: 'Banana Pro', type: 'CHAT', category: 'IMAGE', defaultEndpoint: '/v1/chat/completions' },
-  'Banana': { id: 'gemini-2.5-flash-image-preview', name: 'Banana', type: 'CHAT', category: 'IMAGE', defaultEndpoint: '/v1/chat/completions' },
-  'Flux2': { id: 'flux-kontext-pro', name: 'Flux 2', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
-  
-  '即梦 4.5': { id: 'doubao-seedream-4-5-251128', name: 'Jimeng 4.5', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
-  '即梦 4': { id: 'doubao-seedream-4-0-250828', name: 'Jimeng 4', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
-  
-  'MJ': { id: 'mj_modal', name: 'Midjourney', type: 'MJ_MODAL', category: 'IMAGE', defaultEndpoint: '/mj/submit/modal' },
-  'Zimage': { id: 'z-image-turbo', name: 'Qwen Zimage', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
-
-  // --- Video Models ---
-  'Sora 2': { id: 'sora-2', name: 'Sora 2', type: 'VIDEO_GEN_CHAT', category: 'VIDEO', defaultEndpoint: '/v1/chat/completions' },
-  'Veo 3.1 Fast': { id: 'veo3.1', name: 'Veo 3.1 Fast', type: 'VIDEO_GEN_STD', category: 'VIDEO', defaultEndpoint: '/v1/video/create', defaultQueryEndpoint: '/v1/video/query' },
-  'Veo 3.1 Pro': { id: 'veo3.1-pro', name: 'Veo 3.1 Pro', type: 'VIDEO_GEN_STD', category: 'VIDEO', defaultEndpoint: '/v1/video/create', defaultQueryEndpoint: '/v1/video/query' },
-  '海螺2.0': { 
-      id: 'MiniMax-Hailuo-02', 
-      name: 'Hailuo 2.0', 
-      type: 'VIDEO_GEN_MINIMAX', 
-      category: 'VIDEO', 
-      defaultEndpoint: '/v1/video_generation',
-      defaultQueryEndpoint: '/v1/query/video_generation',
-      defaultDownloadEndpoint: '/v1/files/retrieve'
-  },
-  '海螺2.3': { 
-      id: 'MiniMax-Hailuo-2.3', 
-      name: 'Hailuo 2.3', 
-      type: 'VIDEO_GEN_MINIMAX', 
-      category: 'VIDEO', 
-      defaultEndpoint: '/v1/video_generation',
-      defaultQueryEndpoint: '/v1/query/video_generation',
-      defaultDownloadEndpoint: '/v1/files/retrieve'
-  },
-  
-  // Kling O1
-  'Kling O1 Pro': { id: 'kling-omni-video', name: 'Kling O1 Pro', type: 'KLING_OMNI', category: 'VIDEO', defaultEndpoint: '/kling/v1/videos/omni-video' },
-  
-  '即梦 3.5': { id: 'doubao-seedance-1-5-pro', name: '即梦 3.5', type: 'VIDEO_GEN_STD', category: 'VIDEO', defaultEndpoint: '/v1/videos' },
-  
-  // Kling 2.5
-  'Kling 2.5 Pro': { id: 'kling-v2-5-turbo', name: 'Kling 2.5 Pro', type: 'KLING', category: 'VIDEO', defaultEndpoint: '/kling/v1/videos' },
-
-  'Wan2.6': { 
-      id: 'wan2.6-i2v', 
-      name: 'Qwen Wan 2.6', 
-      type: 'VIDEO_GEN_STD', 
-      category: 'VIDEO', 
-      defaultEndpoint: '/alibailian/api/v1/services/aigc/video-generation/video-synthesis',
-      defaultQueryEndpoint: '/alibailian/api/v1/tasks/{id}'
-  },
-  'Wan2.5': { 
-      id: 'wan2.5-i2v-preview', 
-      name: 'Qwen Wan 2.5', 
-      type: 'VIDEO_GEN_STD', 
-      category: 'VIDEO', 
-      defaultEndpoint: '/alibailian/api/v1/services/aigc/video-generation/video-synthesis',
-      defaultQueryEndpoint: '/alibailian/api/v1/tasks/{id}'
-  },
-  
-  'Grok video 3': { id: 'grok-video-3', name: 'Grok Video', type: 'VIDEO_GEN_STD', category: 'VIDEO', defaultEndpoint: '/v1/video/create', defaultQueryEndpoint: '/v1/video/query' },
+  'Agnes Image': { id: 'agnes-image-2.1-flash', name: 'Agnes Image', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
+  'Agnes Image Edit': { id: 'agnes-image-2.0-flash', name: 'Agnes Image Edit', type: 'IMAGE_GEN', category: 'IMAGE', defaultEndpoint: '/v1/images/generations' },
+  'Agnes Video': { id: 'agnes-video-v2.0', name: 'Agnes Video', type: 'VIDEO_GEN_STD', category: 'VIDEO', defaultEndpoint: '/v1/videos', defaultQueryEndpoint: '/v1/videos' },
   
   ...customModels
 };
@@ -187,8 +130,6 @@ export const registerCustomModel = (key: string, def: ModelDef) => {
     const current = loadCustomModels();
     current[key] = def;
     localStorage.setItem(CUSTOM_MODELS_KEY, JSON.stringify(current));
-    // 如果之前隐藏过，取消隐藏
-    unhideModel(key);
     if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('modelRegistryUpdated'));
     }

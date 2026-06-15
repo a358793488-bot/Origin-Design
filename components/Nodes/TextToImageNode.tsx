@@ -30,7 +30,7 @@ export const TextToImageNode: React.FC<TextToImageNodeProps> = ({
     const isSelectedAndStable = selected && !isSelecting;
 
     const checkConfig = useCallback(() => {
-         const mName = data.model || 'BananaPro';
+         const mName = data.model || 'Agnes Image';
          const cfg = getModelConfig(mName);
          setIsConfigured(!!cfg.key);
     }, [data.model]);
@@ -55,8 +55,8 @@ export const TextToImageNode: React.FC<TextToImageNodeProps> = ({
     useEffect(() => { if (isSelectedAndStable && showControls) { const t = setTimeout(() => setDeferredInputs(true), 100); return () => clearTimeout(t); } else setDeferredInputs(false); }, [isSelectedAndStable, showControls]);
 
     // Get Rules for current model
-    const currentModel = data.model || 'BananaPro';
-    const handler = IMAGE_HANDLERS[currentModel] || IMAGE_HANDLERS['BananaPro']; // Fallback rules
+    const currentModel = data.model || 'Agnes Image';
+    const handler = IMAGE_HANDLERS[currentModel] || IMAGE_HANDLERS['Agnes Image']; // Fallback rules
     const rules = handler.rules;
     const supportedResolutions = rules.resolutions || ['1k'];
     const supportedRatios = rules.ratios || ['1:1', '16:9'];
@@ -159,20 +159,20 @@ export const TextToImageNode: React.FC<TextToImageNodeProps> = ({
             <div className="absolute top-full left-1/2 -translate-x-1/2 min-w-[520px] pt-4 z-[70] pointer-events-auto" onMouseDown={(e) => e.stopPropagation()}>
                  {inputs.length > 0 && <LocalInputThumbnails inputs={inputs} ready={deferredInputs} isDark={isDark} />}
                  <div className={`${controlPanelBg} rounded-2xl p-4 flex flex-col gap-3 border`}>
-                      {/* Prompt Input */}
-                      <textarea 
-                          className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
-                          placeholder="描述你想要生成的图片..." 
-                          value={data.prompt || ''} 
-                          onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
-                          onWheel={(e) => e.stopPropagation()} 
-                      />
+                       {/* Prompt Input */}
+                       <textarea 
+                           className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
+                           placeholder="描述你想要生成的图片..." 
+                           value={data.prompt || ''} 
+                           onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
+                           onWheel={(e) => e.stopPropagation()} 
+                       />
                       
                       {/* Parameters Row - All in one line */}
                       <div className="flex items-center gap-2">
                           <LocalCustomDropdown 
                               options={imageModels} 
-                              value={data.model || 'BananaPro'} 
+                              value={data.model || 'Agnes Image'} 
                               onChange={(val: any) => updateData(data.id, { model: val })} 
                               isOpen={activeDropdown === 'model'} 
                               onToggle={() => setActiveDropdown(activeDropdown === 'model' ? null : 'model')} 

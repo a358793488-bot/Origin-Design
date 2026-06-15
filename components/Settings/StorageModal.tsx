@@ -259,7 +259,7 @@ export const StorageModal: React.FC<StorageModalProps> = ({ isOpen, onClose, isD
                 {/* 缓存类型列表 */}
                 {cacheStats && (
                     <div className="space-y-2 mb-4">
-                        {Object.entries(cacheStats.byType).map(([type, size]) => (
+                        {Object.entries(cacheStats.byType).map(([type, size]: [string, number]) => (
                             <div 
                                 key={type}
                                 className={`flex items-center justify-between p-3 rounded-md ${isDark ? 'bg-zinc-950' : 'bg-white'} border ${borderColor}`}

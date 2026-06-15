@@ -32,7 +32,7 @@ export const TextToVideoNode: React.FC<TextToVideoNodeProps> = ({
     const isSelectedAndStable = selected && !isSelecting;
 
     const checkConfig = useCallback(() => {
-         const mName = data.model || 'Sora 2';
+         const mName = data.model || 'Agnes Video';
          const cfg = getModelConfig(mName);
          setIsConfigured(!!cfg.key);
     }, [data.model]);
@@ -56,35 +56,7 @@ export const TextToVideoNode: React.FC<TextToVideoNodeProps> = ({
 
     // Group models for split-pane/flyout dropdown
     const groupedVideoModels = useMemo(() => {
-        const groups: Record<string, string[]> = {
-            'Kling': [],
-            'Hailuo': [],
-            'Veo': [],
-            'Wan': []
-        };
-        const ungrouped: string[] = [];
-        
-        videoModels.forEach(m => {
-            const lower = m.toLowerCase();
-            if (m.startsWith('Kling') || m.includes('可灵')) {
-                 groups['Kling'].push(m);
-            } else if (m.startsWith('海螺') || lower.includes('hailuo')) {
-                 groups['Hailuo'].push(m);
-            } else if (m.startsWith('Veo')) {
-                 groups['Veo'].push(m);
-            } else if (m.startsWith('Wan') || lower.includes('wan')) {
-                 groups['Wan'].push(m);
-            } else {
-                 ungrouped.push(m);
-            }
-        });
-        
-        const result = Object.entries(groups)
-            .filter(([_, items]) => items.length > 0)
-            .map(([label, items]) => ({ label, items }));
-            
-        // Return mixed array: Objects for groups, Strings for ungrouped items
-        return [...result, ...ungrouped];
+        return videoModels;
     }, [videoModels]);
 
     useEffect(() => { if (isSelectedAndStable && showControls) { const t = setTimeout(() => setDeferredInputs(true), 100); return () => clearTimeout(t); } else setDeferredInputs(false); }, [isSelectedAndStable, showControls]);
@@ -111,8 +83,8 @@ export const TextToVideoNode: React.FC<TextToVideoNodeProps> = ({
     };
 
 
-    const currentModel = data.model || 'Sora 2';
-    const handler = VIDEO_HANDLERS[currentModel] || VIDEO_HANDLERS['Sora 2'];
+const currentModel = data.model || 'Agnes Video';
+        const handler = VIDEO_HANDLERS[currentModel] || VIDEO_HANDLERS['Agnes Video'];
     const rules = handler.rules;
 
     const resOptions = rules.resolutions || ['720p'];
@@ -220,20 +192,20 @@ export const TextToVideoNode: React.FC<TextToVideoNodeProps> = ({
           <div className="absolute top-full left-1/2 -translate-x-1/2 min-w-[580px] pt-4 z-[70] pointer-events-auto" onMouseDown={(e) => e.stopPropagation()}>
                {inputs.length > 0 && <LocalInputThumbnails inputs={inputs} ready={deferredInputs} isDark={isDark} />}
               <div className={`${controlPanelBg} rounded-2xl p-4 flex flex-col gap-3 border`}>
-                  {/* Prompt Input */}
-                  <textarea 
-                      className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
-                      placeholder="描述你想要生成的视频场景..." 
-                      value={data.prompt || ''} 
-                      onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
-                      onWheel={(e) => e.stopPropagation()} 
-                  />
+                   {/* Prompt Input */}
+                   <textarea 
+                       className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
+                       placeholder="描述你想要生成的视频场景..." 
+                       value={data.prompt || ''} 
+                       onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
+                       onWheel={(e) => e.stopPropagation()} 
+                   />
                   
                   {/* Parameters Row - All in one line */}
                   <div className="flex items-center gap-2">
                        <LocalCustomDropdown 
                            options={groupedVideoModels} 
-                           value={data.model || 'Sora 2'} 
+                           value={data.model || 'Agnes Video'} 
                            onChange={(val: any) => updateData(data.id, { model: val })} 
                            isOpen={activeDropdown === 'model'} 
                            onToggle={() => setActiveDropdown(activeDropdown === 'model' ? null : 'model')} 

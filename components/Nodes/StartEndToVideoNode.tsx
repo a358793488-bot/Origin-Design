@@ -39,7 +39,7 @@ export const StartEndToVideoNode: React.FC<StartEndToVideoNodeProps> = ({
     const hasValidInputs = hasStartFrame && hasEndFrame;
 
     const checkConfig = useCallback(() => {
-         const mName = data.model || 'Sora 2';
+         const mName = data.model || 'Agnes Video';
          const cfg = getModelConfig(mName);
          setIsConfigured(!!cfg.key);
     }, [data.model]);
@@ -61,36 +61,8 @@ export const StartEndToVideoNode: React.FC<StartEndToVideoNodeProps> = ({
         };
     }, [checkConfig, updateModels]);
 
-    // Group models for dropdown
     const groupedVideoModels = useMemo(() => {
-        const groups: Record<string, string[]> = {
-            'Kling': [],
-            'Hailuo': [],
-            'Veo': [],
-            'Wan': []
-        };
-        const ungrouped: string[] = [];
-        
-        videoModels.forEach(m => {
-            const lower = m.toLowerCase();
-            if (m.startsWith('Kling') || m.includes('可灵')) {
-                 groups['Kling'].push(m);
-            } else if (m.startsWith('海螺') || lower.includes('hailuo')) {
-                 groups['Hailuo'].push(m);
-            } else if (m.startsWith('Veo')) {
-                 groups['Veo'].push(m);
-            } else if (m.startsWith('Wan') || lower.includes('wan')) {
-                 groups['Wan'].push(m);
-            } else {
-                 ungrouped.push(m);
-            }
-        });
-        
-        const result = Object.entries(groups)
-            .filter(([_, items]) => items.length > 0)
-            .map(([label, items]) => ({ label, items }));
-            
-        return [...result, ...ungrouped];
+        return videoModels;
     }, [videoModels]);
 
     useEffect(() => { let interval: any; if (data.isLoading) { setProgress(0); interval = setInterval(() => { setProgress(prev => (prev >= 95 ? 95 : prev + Math.max(0.5, (95 - prev) / 20))); }, 200); } else setProgress(0); return () => clearInterval(interval); }, [data.isLoading]);
@@ -115,8 +87,8 @@ export const StartEndToVideoNode: React.FC<StartEndToVideoNodeProps> = ({
         updateData(data.id, { aspectRatio: ratio, width: Math.round(newW), height: Math.round(newH) });
     };
 
-    const currentModel = data.model || 'Sora 2';
-    const handler = VIDEO_HANDLERS[currentModel] || VIDEO_HANDLERS['Sora 2'];
+const currentModel = data.model || 'Agnes Video';
+        const handler = VIDEO_HANDLERS[currentModel] || VIDEO_HANDLERS['Agnes Video'];
     const rules = handler.rules;
 
     const resOptions = rules.resolutions || ['720p'];
@@ -297,20 +269,20 @@ export const StartEndToVideoNode: React.FC<StartEndToVideoNodeProps> = ({
                    </div>
                )}
               <div className={`${controlPanelBg} rounded-2xl p-4 flex flex-col gap-3 border`}>
-                  {/* Prompt Input */}
-                  <textarea 
-                      className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
-                      placeholder="描述从首帧到尾帧的运动变化..." 
-                      value={data.prompt || ''} 
-                      onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
-                      onWheel={(e) => e.stopPropagation()} 
-                  />
+                   {/* Prompt Input */}
+                   <textarea 
+                       className={`w-full border rounded-xl px-4 py-3 text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 min-h-[72px] no-scrollbar transition-all ${inputBg}`} 
+                       placeholder="描述从首帧到尾帧的运动变化..." 
+                       value={data.prompt || ''} 
+                       onChange={(e) => updateData(data.id, { prompt: e.target.value })} 
+                       onWheel={(e) => e.stopPropagation()} 
+                   />
                   
                   {/* Parameters Row - All in one line */}
                   <div className="flex items-center gap-2">
                        <LocalCustomDropdown 
                            options={groupedVideoModels} 
-                           value={data.model || 'Sora 2'} 
+                           value={data.model || 'Agnes Video'} 
                            onChange={(val: any) => updateData(data.id, { model: val })} 
                            isOpen={activeDropdown === 'model'} 
                            onToggle={() => setActiveDropdown(activeDropdown === 'model' ? null : 'model')} 
